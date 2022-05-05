@@ -1,6 +1,7 @@
 import pyautogui
 
 from settings import *
+from sounds import *
 
 
 def dot_in_rectangle(rect: pg.Rect, dot: tuple) -> bool:
@@ -41,6 +42,7 @@ class Button:
                 if event.type == pg.MOUSEBUTTONDOWN:
                     left, _, _ = pg.mouse.get_pressed()
                     if left:
+                        click_button.play()
                         self.action(**self.kwargs)
         else:
             self._font_color = self.color

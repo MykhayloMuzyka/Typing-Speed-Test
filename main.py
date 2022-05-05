@@ -4,6 +4,7 @@ from random import randint
 
 from leaderboard import Leader
 from shortcuts import *
+from sounds import *
 from sprites import *
 
 pg.init()
@@ -38,6 +39,10 @@ def main_menu_screen():
     x_pos = (WIDTH - big_button_width) // 2
     y_pos = HEIGHT * 0.4
     padding = HEIGHT * 0.1
+    texts.append(
+        ColouredText(position=(0, HEIGHT * 0.2), text='TYPING SPEED TEST', color=(255, 0, 0), width_center=True,
+                     font_size=WIDTH // 15)
+    )
     buttons.append(
         Button(position=(x_pos, y_pos), font_size=WIDTH // 30, text="PLAY", action=levels_list, width=big_button_width,
                levels_type='game'))
@@ -243,7 +248,7 @@ def result_screen():
     texts.append(ColouredText(
         position=(0, HEIGHT * 0.3 + padding * 1.5),
         color=(122, 122, 122),
-        text=f"Input efficiency: "
+        text=f"Typing efficiency: "
              f"{round((count_of_symbols - len(mistakes)) / count_of_symbols, 2) if count_of_symbols else 0}",
         font_size=WIDTH // 40,
         width_center=True
@@ -264,6 +269,7 @@ def result_screen():
     ))
     for menu_event in pg.event.get():
         if menu_event.type == pg.KEYDOWN:
+            click_key.play()
             if is_in_top10():
                 if pg.key.get_pressed()[pg.K_RETURN]:
                     write_result()
@@ -290,7 +296,7 @@ def result_screen():
 
 
 def count_score(hearts_left, inputted_phrases, symbols_per_sec, count_of_inputted_symbols):
-    efficiency_of_input = (count_of_inputted_symbols - hearts_count - hearts_left) / count_of_inputted_symbols \
+    efficiency_of_input = (count_of_inputted_symbols - (hearts_count - hearts_left)) / count_of_inputted_symbols \
         if count_of_inputted_symbols else 0
     return round(symbols_per_sec * (inputted_phrases + 1) * (1 + hearts_left / 10) * efficiency_of_input, 2)
 
@@ -298,11 +304,14 @@ def count_score(hearts_left, inputted_phrases, symbols_per_sec, count_of_inputte
 def continue_game():
     global pause, start
     pause = False
+    pause_off.play()
     start = time.time()
 
 
 if __name__ == '__main__':
     mistakes = list()
+    sound_mistakes = list()
+    countdown_started = False
 
     while True:
         clear_items()
@@ -337,10 +346,14 @@ if __name__ == '__main__':
                 texts.append(
                     ColouredText((0, 0), 'PRESS SPACE TO START',
                                  (122, 122, 122), WIDTH // 30, width_center=True, height_center=True))
+                texts.append(
+                    ColouredText((0, HEIGHT * 0.55), 'SWITCH TO A SLOVAK KEYBOARD',
+                                 (122, 122, 122), WIDTH // 50, width_center=True))
                 for event in pg.event.get():
                     if event.type == pg.KEYDOWN:
                         if pg.key.get_pressed()[pg.K_SPACE]:
                             started = True
+                            game_start.play()
             else:
                 if pause:
                     buttons.append(
@@ -365,6 +378,7 @@ if __name__ == '__main__':
                                     inputted_text += event.unicode
                                     count_of_symbols += 1
                             if pg.key.get_pressed()[pg.K_F1]:
+                                pause_on.play()
                                 pause = True
                                 time_left = float(curr_time)
 
@@ -389,6 +403,9 @@ if __name__ == '__main__':
                     if inputted_text:
                         if inputted_text[-1] != generated_text[len(inputted_text) - 1]:
                             mistakes.append(inputted_text)
+                            sound_mistakes = set(mistakes)
+                            if len(mistakes) == len(sound_mistakes):
+                                mistake.play()
                             mistakes = list(set(mistakes))
 
                     for i in range(hearts_count - len(mistakes)):
@@ -401,9 +418,13 @@ if __name__ == '__main__':
                         inputted_words += 1
                         generated_text = generate_phrase(LEVEL)
                         colors_for_generated_text = [(122, 122, 122) for _ in generated_text]
+                        done.play()
 
                     if len(mistakes) == hearts_count or float(curr_time) == 0.00:
+                        if len(mistakes) == hearts_count:
+                            game_over.play()
                         started = False
+                        countdown_started = True
                         result()
 
                     score = count_score(5 - len(mistakes), inputted_words, symbols_per_second, count_of_symbols)
@@ -428,6 +449,10 @@ if __name__ == '__main__':
 
                     texts.append(
                         ColouredText((0, HEIGHT * 0.75), 'F1 - pause', (122, 122, 122), WIDTH // 35, width_center=True))
+
+                    if float(curr_time) <= 4:
+                        countdown.play()
+                        countdown_started = True
 
         elif CURRENT_PAGE == 'result':
             result_screen()
