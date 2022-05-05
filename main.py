@@ -152,7 +152,7 @@ def leaderboard_screen():
                              str(leader.score), (122, 122, 122),
                              WIDTH // 60))
         else:
-            for _ in range(6):
+            for i in range(6):
                 texts.append(
                     ColouredText(((i + 1) * width_padding, HEIGHT * 0.1 + height_padding * place),
                                  '-', (122, 122, 122),
