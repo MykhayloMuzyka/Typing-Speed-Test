@@ -31,61 +31,99 @@ def clear_items():
     texts.clear()
 
 
-def empty_screen():
-    buttons.append(Button(position=(150, 100), text="BACK", action=main_menu, width=200))
-
-
-def main_menu_screen():
-    x_pos = (WIDTH - big_button_width) // 2
-    y_pos = HEIGHT * 0.4
-    padding = HEIGHT * 0.1
-    texts.append(
-        ColouredText(position=(0, HEIGHT * 0.2), text='TYPING SPEED TEST', color=(255, 0, 0), width_center=True,
-                     font_size=WIDTH // 15)
-    )
-    buttons.append(
-        Button(position=(x_pos, y_pos), font_size=WIDTH // 30, text="PLAY", action=levels_list, width=big_button_width,
-               levels_type='game'))
-    buttons.append(
-        Button(position=(x_pos, y_pos + padding), font_size=WIDTH // 30, text="LEADERBOARD", action=levels_list,
-               width=big_button_width, levels_type='leaderboard'))
-    buttons.append(
-        Button(position=(x_pos, y_pos + padding * 2), font_size=WIDTH // 30, text="QUIT", action=exit,
-               width=big_button_width))
-
-
-def levels_list_page(action):
-    y_pos = HEIGHT * 0.2
-    padding = HEIGHT * 0.09
-
-    for x in (small_button_width, WIDTH - small_button_width * 2):
-        for y in range(5):
-            if len(buttons) < 5:
-                buttons.append(
-                    Button(position=(x, y_pos + padding * y), font_size=WIDTH // 30, text=f"LEVEL {y + 1}",
-                           action=action, width=WIDTH // 5,
-                           level=y + 1))
-            else:
-                buttons.append(
-                    Button(position=(x, y_pos + padding * y), font_size=WIDTH // 30, text=f"LEVEL {y + 6}",
-                           action=action, width=WIDTH // 5,
-                           level=y + 6))
-
-    buttons.append(
-        Button(position=((WIDTH - big_button_width) // 2, y_pos + padding * 6), font_size=WIDTH // 30, text="MENU",
-               action=main_menu,
-               width=big_button_width))
-
-
 def main_menu():
     global CURRENT_PAGE, started
     CURRENT_PAGE = 'main'
     started = False
 
 
+def main_menu_screen():
+    x_pos = (WIDTH - BIG_BUTTON_WIDTH) // 2
+    y_pos = HEIGHT * 0.4
+    padding = HEIGHT * 0.1
+    texts.append(
+        ColouredText(
+            position=(0, HEIGHT * 0.2),
+            text='TYPING SPEED TEST',
+            color=(255, 0, 0),
+            width_center=True,
+            font_size=WIDTH // 15
+        )
+    )
+    buttons.append(
+        Button(
+            position=(x_pos, y_pos),
+            font_size=WIDTH // 30,
+            text="PLAY",
+            action=levels_list,
+            width=BIG_BUTTON_WIDTH,
+            levels_type='game'
+        )
+    )
+    buttons.append(
+        Button(
+            position=(x_pos, y_pos + padding),
+            font_size=WIDTH // 30,
+            text="LEADERBOARD",
+            action=levels_list,
+            width=BIG_BUTTON_WIDTH,
+            levels_type='leaderboard'
+        )
+    )
+    buttons.append(
+        Button(
+            position=(x_pos, y_pos + padding * 2),
+            font_size=WIDTH // 30,
+            text="QUIT",
+            action=exit,
+            width=BIG_BUTTON_WIDTH
+        )
+    )
+
+
 def levels_list(levels_type: str):
     global CURRENT_PAGE
     CURRENT_PAGE = f'levels_{levels_type}'
+
+
+def levels_list_page(action):
+    y_pos = HEIGHT * 0.2
+    padding = HEIGHT * 0.09
+
+    for x in (SMALL_BUTTON_WIDTH, WIDTH - SMALL_BUTTON_WIDTH * 2):
+        for y in range(5):
+            if len(buttons) < 5:
+                buttons.append(
+                    Button(
+                        position=(x, y_pos + padding * y),
+                        font_size=WIDTH // 30,
+                        text=f"LEVEL {y + 1}",
+                        action=action,
+                        width=WIDTH // 5,
+                        level=y + 1
+                    )
+                )
+            else:
+                buttons.append(
+                    Button(
+                        position=(x, y_pos + padding * y),
+                        font_size=WIDTH // 30,
+                        text=f"LEVEL {y + 6}",
+                        action=action,
+                        width=WIDTH // 5,
+                        level=y + 6
+                    )
+                )
+
+    buttons.append(
+        Button(
+            position=((WIDTH - BIG_BUTTON_WIDTH) // 2, y_pos + padding * 6),
+            font_size=WIDTH // 30,
+            text="MENU",
+            action=main_menu,
+            width=BIG_BUTTON_WIDTH
+        )
+    )
 
 
 def generate_phrase(level: int) -> str:
@@ -128,50 +166,81 @@ def leaderboard_screen():
             screen.blit(bronze, (WIDTH * 0.095, HEIGHT * 0.1 + height_padding * place))
         else:
             texts.append(
-                ColouredText((WIDTH * 0.1, HEIGHT * 0.1 + height_padding * place), f'{place})', (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(WIDTH * 0.1, HEIGHT * 0.1 + height_padding * place),
+                    text=f'{place})',
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60
+                )
+            )
         if place in current_leaderboard:
             leader = current_leaderboard[place]
             texts.append(
-                ColouredText((width_padding, HEIGHT * 0.1 + height_padding * place),
-                             str(leader.username), (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(width_padding, HEIGHT * 0.1 + height_padding * place),
+                    text=str(leader.username),
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60
+                )
+            )
             texts.append(
-                ColouredText((2 * width_padding, HEIGHT * 0.1 + height_padding * place),
-                             str(leader.inputted_phrases), (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(2 * width_padding, HEIGHT * 0.1 + height_padding * place),
+                    text=str(leader.inputted_phrases),
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60
+                )
+            )
             texts.append(
-                ColouredText((3 * width_padding, HEIGHT * 0.1 + height_padding * place),
-                             str(leader.symbols_per_second), (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(3 * width_padding, HEIGHT * 0.1 + height_padding * place),
+                    text=str(leader.symbols_per_second),
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60
+                )
+            )
             texts.append(
-                ColouredText((4 * width_padding, HEIGHT * 0.1 + height_padding * place),
-                             str(leader.hearts_left), (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(4 * width_padding, HEIGHT * 0.1 + height_padding * place),
+                    text=str(leader.hearts_left),
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60
+                )
+            )
             texts.append(
-                ColouredText((5 * width_padding, HEIGHT * 0.1 + height_padding * place),
-                             str(leader.input_efficiency), (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(5 * width_padding, HEIGHT * 0.1 + height_padding * place),
+                    text=str(leader.input_efficiency),
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60))
             texts.append(
-                ColouredText((6 * width_padding, HEIGHT * 0.1 + height_padding * place),
-                             str(leader.score), (122, 122, 122),
-                             WIDTH // 60))
+                ColouredText(
+                    position=(6 * width_padding, HEIGHT * 0.1 + height_padding * place),
+                    text=str(leader.score),
+                    color=(122, 122, 122),
+                    font_size=WIDTH // 60
+                )
+            )
         else:
             for i in range(6):
                 texts.append(
-                    ColouredText(((i + 1) * width_padding, HEIGHT * 0.1 + height_padding * place),
-                                 '-', (122, 122, 122),
-                                 WIDTH // 60))
+                    ColouredText(
+                        position=((i + 1) * width_padding, HEIGHT * 0.1 + height_padding * place),
+                        text='-',
+                        color=(122, 122, 122),
+                        font_size=WIDTH // 60
+                    )
+                )
         buttons.append(
-            Button(position=((WIDTH - big_button_width) // 2, HEIGHT * 0.9), font_size=WIDTH // 30, text="BACK",
-                   action=levels_list,
-                   width=big_button_width, levels_type='leaderboard'))
-
-
-def result():
-    global CURRENT_PAGE, username
-    CURRENT_PAGE = 'result'
-    username = 'player'
+            Button(
+                position=((WIDTH - BIG_BUTTON_WIDTH) // 2, HEIGHT * 0.9),
+                font_size=WIDTH // 30,
+                text="BACK",
+                action=levels_list,
+                width=BIG_BUTTON_WIDTH,
+                levels_type='leaderboard'
+            )
+        )
 
 
 def write_result():
@@ -181,7 +250,7 @@ def write_result():
         current_leaderboard = pickle.load(f)
     leaders_list = list(current_leaderboard.values())
     efficiency = (count_of_symbols - len(mistakes)) / count_of_symbols if count_of_symbols else 0
-    current_res = Leader(username, inputted_words, round(symbols_per_second, 2), hearts_count - len(mistakes),
+    current_res = Leader(username, inputted_words, round(symbols_per_second, 2), HEARTS_COUNT - len(mistakes),
                          round(efficiency, 2), score)
     leaders_list.append(current_res)
     leaders_list = sorted(leaders_list, key=lambda leader: leader.score, reverse=True)[:10]
@@ -202,6 +271,12 @@ def is_in_top10():
         if score >= leaders_list[-1].score:
             return True
     return False
+
+
+def result():
+    global CURRENT_PAGE, username
+    CURRENT_PAGE = 'result'
+    username = 'player'
 
 
 def result_screen():
@@ -241,7 +316,7 @@ def result_screen():
     texts.append(ColouredText(
         position=(0, HEIGHT * 0.3 + padding * 1),
         color=(122, 122, 122),
-        text=f"Hearts left: {hearts_count - len(mistakes)}",
+        text=f"Hearts left: {HEARTS_COUNT - len(mistakes)}",
         font_size=WIDTH // 40,
         width_center=True
     ))
@@ -296,7 +371,7 @@ def result_screen():
 
 
 def count_score(hearts_left, inputted_phrases, symbols_per_sec, count_of_inputted_symbols):
-    efficiency_of_input = (count_of_inputted_symbols - (hearts_count - hearts_left)) / count_of_inputted_symbols \
+    efficiency_of_input = (count_of_inputted_symbols - (HEARTS_COUNT - hearts_left)) / count_of_inputted_symbols \
         if count_of_inputted_symbols else 0
     return round(symbols_per_sec * (inputted_phrases + 1) * (1 + hearts_left / 10) * efficiency_of_input, 2)
 
@@ -311,7 +386,6 @@ def continue_game():
 if __name__ == '__main__':
     mistakes = list()
     sound_mistakes = list()
-    countdown_started = False
 
     while True:
         clear_items()
@@ -357,14 +431,21 @@ if __name__ == '__main__':
             else:
                 if pause:
                     buttons.append(
-                        Button(position=((WIDTH - big_button_width) // 2, HEIGHT * 0.4), text="MENU",
+                        Button(position=((WIDTH - BIG_BUTTON_WIDTH) // 2, HEIGHT * 0.4),
+                               text="MENU",
                                font_size=WIDTH // 30,
                                action=main_menu,
-                               width=big_button_width))
+                               width=BIG_BUTTON_WIDTH
+                               )
+                    )
                     buttons.append(
-                        Button(position=((WIDTH - big_button_width) // 2, HEIGHT * 0.5), text="CONTINUE",
-                               font_size=WIDTH // 30, action=continue_game,
-                               width=big_button_width))
+                        Button(position=((WIDTH - BIG_BUTTON_WIDTH) // 2, HEIGHT * 0.5),
+                               text="CONTINUE",
+                               font_size=WIDTH // 30,
+                               action=continue_game,
+                               width=BIG_BUTTON_WIDTH
+                               )
+                    )
                 else:
                     curr_time = str(round(time_left - (time.time() - start), 2))
                     if float(curr_time) != 60:
@@ -382,18 +463,39 @@ if __name__ == '__main__':
                                 pause = True
                                 time_left = float(curr_time)
 
-                    coloured_text = ColouredText((0, 0), generated_text, colors_for_generated_text,
-                                                 font_size=WIDTH // 30)
+                    coloured_text = ColouredText(
+                        position=(0, 0),
+                        text=generated_text,
+                        color=colors_for_generated_text,
+                        font_size=WIDTH // 30
+                    )
                     texts.append(
-                        ColouredText((0, HEIGHT * 0.5), generated_text,
-                                     colors_for_generated_text, font_size=WIDTH // 30, width_center=True))
+                        ColouredText(
+                            position=(0, HEIGHT * 0.5),
+                            text=generated_text,
+                            color=colors_for_generated_text,
+                            font_size=WIDTH // 30,
+                            width_center=True
+                        )
+                    )
                     pg.draw.rect(surface=screen,
-                                 rect=pg.Rect(WIDTH // 10, texts[-1].position[1] + HEIGHT // 10,
-                                              (WIDTH - 2 * WIDTH // 10),
-                                              texts[-1].height), color=(255, 255, 255))
+                                 rect=pg.Rect(
+                                     left=WIDTH // 10,
+                                     top=texts[-1].position[1] + HEIGHT // 10,
+                                     width=(WIDTH - 2 * WIDTH // 10),
+                                     height=texts[-1].height
+                                 ),
+                                 color=(255, 255, 255
+                                        )
+                                 )
                     texts.append(
-                        ColouredText((texts[-1].position[0], texts[-1].position[1] + HEIGHT // 10), inputted_text,
-                                     (122, 122, 122), font_size=WIDTH // 30))
+                        ColouredText(
+                            position=(texts[-1].position[0], texts[-1].position[1] + HEIGHT // 10),
+                            text=inputted_text,
+                            color=(122, 122, 122),
+                            font_size=WIDTH // 30
+                        )
+                    )
 
                     for idx, symbol in enumerate(inputted_text):
                         if symbol == generated_text[idx]:
@@ -408,7 +510,7 @@ if __name__ == '__main__':
                                 mistake.play()
                             mistakes = list(set(mistakes))
 
-                    for i in range(hearts_count - len(mistakes)):
+                    for i in range(HEARTS_COUNT - len(mistakes)):
                         screen.blit(heart, ((i + 1) * (WIDTH // 30), HEIGHT // 20))
 
                     if len(generated_text) == len(inputted_text):
@@ -420,11 +522,11 @@ if __name__ == '__main__':
                         colors_for_generated_text = [(122, 122, 122) for _ in generated_text]
                         done.play()
 
-                    if len(mistakes) == hearts_count or float(curr_time) == 0.00:
-                        if len(mistakes) == hearts_count:
+                    if len(mistakes) == HEARTS_COUNT or float(curr_time) == 0.00:
+                        countdown.stop()
+                        if len(mistakes) == HEARTS_COUNT:
                             game_over.play()
                         started = False
-                        countdown_started = True
                         result()
 
                     score = count_score(5 - len(mistakes), inputted_words, symbols_per_second, count_of_symbols)
@@ -437,22 +539,46 @@ if __name__ == '__main__':
 
                     symbols_per_second_text = f'Symbols/sec: {round(symbols_per_second, 2)}'
                     texts.append(
-                        ColouredText((WIDTH * 0.75, HEIGHT * 0.05), symbols_per_second_text,
-                                     (122, 122, 122), WIDTH // 30))
+                        ColouredText(
+                            position=(WIDTH * 0.75, HEIGHT * 0.05),
+                            text=symbols_per_second_text,
+                            color=(122, 122, 122),
+                            font_size=WIDTH // 30
+                        )
+                    )
                     inputted_phrases_text = f'Inputted phrases: {inputted_words}'
-                    texts.append(ColouredText((WIDTH * 0.75, HEIGHT * 0.1), inputted_phrases_text,
-                                              (122, 122, 122), WIDTH // 30))
+                    texts.append(
+                        ColouredText(
+                            position=(WIDTH * 0.75, HEIGHT * 0.1),
+                            text=inputted_phrases_text,
+                            color=(122, 122, 122),
+                            font_size=WIDTH // 30
+                            )
+                    )
 
                     score_text = f'Score: {score}'
-                    texts.append(ColouredText((WIDTH * 0.75, HEIGHT * 0.15), score_text,
-                                              (122, 122, 122), WIDTH // 30))
+                    texts.append(
+                        ColouredText(
+                            position=(WIDTH * 0.75, HEIGHT * 0.15),
+                            text=score_text,
+                            color=(122, 122, 122),
+                            font_size=WIDTH // 30
+                        )
+                    )
 
                     texts.append(
-                        ColouredText((0, HEIGHT * 0.75), 'F1 - pause', (122, 122, 122), WIDTH // 35, width_center=True))
+                        ColouredText(
+                            position=(0, HEIGHT * 0.75),
+                            text='F1 - pause',
+                            color=(122, 122, 122),
+                            font_size=WIDTH // 35,
+                            width_center=True
+                        )
+                    )
 
                     if float(curr_time) <= 4:
-                        countdown.play()
-                        countdown_started = True
+                        if started:
+                            countdown.play()
 
         elif CURRENT_PAGE == 'result':
             result_screen()

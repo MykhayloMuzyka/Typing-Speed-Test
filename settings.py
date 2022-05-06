@@ -7,6 +7,6 @@ SLOVAK_ALPHABET = 'aáäbcčdďdzdžeéfghhiíjklĺľmnňoóôpqrŕsštťuúvwxy
 SYMBOLS = ",.-'!?@#$%^&*()+=/\\"
 NUMBERS = '1234567890'
 
-hearts_count = 5
-small_button_width = WIDTH // 5
-big_button_width = WIDTH // 4
+HEARTS_COUNT = 5
+SMALL_BUTTON_WIDTH = WIDTH // 5
+BIG_BUTTON_WIDTH = WIDTH // 4
