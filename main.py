@@ -478,16 +478,12 @@ if __name__ == '__main__':
                             width_center=True
                         )
                     )
-                    pg.draw.rect(surface=screen,
-                                 rect=pg.Rect(
-                                     left=WIDTH // 10,
-                                     top=texts[-1].position[1] + HEIGHT // 10,
-                                     width=(WIDTH - 2 * WIDTH // 10),
-                                     height=texts[-1].height
-                                 ),
-                                 color=(255, 255, 255
-                                        )
-                                 )
+                    pg.draw.rect(
+                        surface=screen,
+                        rect=pg.Rect(WIDTH // 10, texts[-1].position[1] + HEIGHT // 10, (WIDTH - 2 * WIDTH // 10),
+                                     texts[-1].height),
+                        color=(255, 255, 255)
+                    )
                     texts.append(
                         ColouredText(
                             position=(texts[-1].position[0], texts[-1].position[1] + HEIGHT // 10),
@@ -553,7 +549,7 @@ if __name__ == '__main__':
                             text=inputted_phrases_text,
                             color=(122, 122, 122),
                             font_size=WIDTH // 30
-                            )
+                        )
                     )
 
                     score_text = f'Score: {score}'
